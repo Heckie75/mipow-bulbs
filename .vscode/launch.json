@@ -1,0 +1,375 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Mipow (blank)",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow --scan",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "--scan"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow --help",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "--help"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow -h",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "-h"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow -h color",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "-h",
+                "color"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow aliases",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "--aliases"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow color",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:9C:4B:0F:AC:E6",
+                "6D:70:4B:0F:AC:E6",
+                "6F:CB:4B:0F:AC:E6",
+                "--log",
+                "DEBUG",
+                "--color",
+                "0",
+                "0",
+                "0",
+                "255"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow on",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:9C:4B:0F:AC:E6",
+                "6D:70:4B:0F:AC:E6",
+                "6F:CB:4B:0F:AC:E6",
+                "--on"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow off",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:9C:4B:0F:AC:E6",
+                "6D:70:4B:0F:AC:E6",
+                "6F:CB:4B:0F:AC:E6",
+                "--off"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow get color",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--log",
+                "DEBUG",
+                "--color"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow toggle",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--toggle"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow up",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--up"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow down",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--down"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow get effect",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--effect"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow pulse",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--pulse",
+                "0",
+                "1",
+                "0",
+                "0",
+                "255"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow blink",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--blink",
+                "0",
+                "0",
+                "255",
+                "0",
+                "5",
+                "10",
+                "20"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow rainbow",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--rainbow",
+                "64"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow candle",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--candle",
+                "255",
+                "0",
+                "0",
+                "0"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow disco",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--disco",
+                "32"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow hold",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--hold",
+                "255"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow halt",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--halt"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow name",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:3D:4B:0F:AC:E6",
+                "--name",
+                "12345678901234567890"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow dump",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6D:70:4B:0F:AC:E6",
+                "--dump",
+                "--print"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow request timers",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--timer",
+                "--print"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow set timer",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:9C:4B:0F:AC:E6",
+                "--timer",
+                "1",
+                "22:00",
+                "60",
+                "255",
+                "0",
+                "0",
+                "0"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow scene fade",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "6A:9C:4B:0F:AC:E6",
+                "--fade",
+                "5",
+                "255",
+                "0",
+                "0",
+                "0"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Mipow wheel",
+            "type": "python",
+            "request": "launch",
+            "program": "mipow.py",
+            "args": [
+                "Wohnz",
+                "--wheel",
+                "bgr",
+                "23:59"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
