@@ -370,7 +370,7 @@ class Listener():
 
 class MipowBulb(BleakClient):
 
-    MAC_SUFFIX = ":AC:E6"
+    MAC_PRE_SUFFIX = "AC:E6"
 
     CHARACTERISTIC_SERVICE_CHANGED = "00002a05-0000-1000-8000-00805f9b34fb"
     CHARACTERISTIC_BATTERY_LEVEL = "00002a19-0000-1000-8000-00805f9b34fb"
@@ -462,7 +462,7 @@ class MipowBulb(BleakClient):
             try:
                 await self.start_notify(MipowBulb.CHARACTERISTIC_HEART_RATE_MEASUREMENT, callback=_notificationHandler)
             except:
-                LOGGER.warning("Unable to register listener for notifications. Maybe not supported")
+                LOGGER.info("Unable to register listener for notifications. Maybe not supported")
 
     async def disconnect(self):
 
@@ -974,8 +974,9 @@ class MipowBulbController():
                         minute=start_2.minute, runtime=runtime_2, color=Color(green=60, blue=255))
 
         start_3 = start_2 + timedelta(minutes=runtime_2)
+        runtime_3 = 1
         timer_3 = Timer(id=2, type_=Timer.TYPE_WAKEUP, hour=start_3.hour,
-                        minute=start_3.minute, runtime=1, color=Color(white=255))
+                        minute=start_3.minute, runtime=runtime_3, color=Color(white=255))
 
         start_4 = start_3 + timedelta(minutes=runtime * 36 // 60)
         runtime_4 = 1
@@ -1075,7 +1076,7 @@ class MipowBulbController():
 
             if device not in found_devices and device.name:
                 found_devices.add(device)
-                if device.address.upper().endswith(MipowBulb.MAC_SUFFIX):
+                if device.address.upper().startswith(MipowBulb.MAC_PRE_SUFFIX) or device.address.upper().endswith(MipowBulb.MAC_PRE_SUFFIX):
 
                     if consumed_filter and device.address not in found_bulbs:
                         if device.address in consumed_filter or device.name in consumed_filter:
@@ -1124,7 +1125,7 @@ class Alias():
                     for line in ins:
                         _m = re.match(
                             "([0-9A-Fa-f:]+) +(.*)$", line)
-                        if _m and _m.groups()[0].upper().endswith(MipowBulb.MAC_SUFFIX):
+                        if _m and (_m.groups()[0].upper().startswith(MipowBulb.MAC_PRE_SUFFIX) or _m.groups()[0].upper().endswith(MipowBulb.MAC_PRE_SUFFIX)):
                             self.aliases[_m.groups()[0]] = _m.groups()[1]
 
         except:
@@ -1134,7 +1135,7 @@ class Alias():
 
         if re.match(Alias.MAC_PATTERN, label.upper()):
             label = label.upper()
-            if label.upper().endswith(MipowBulb.MAC_SUFFIX):
+            if label.upper().startswith(MipowBulb.MAC_PRE_SUFFIX) or label.upper().endswith(MipowBulb.MAC_PRE_SUFFIX):
                 return [label]
             else:
                 return None
