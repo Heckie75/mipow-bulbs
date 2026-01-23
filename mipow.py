@@ -400,7 +400,7 @@ class MipowBulb(BleakClient):
         else:
             super().__init__(address, timeout=30.0)
 
-        self.name: str = None
+        self.deviceName: str = None
         self.serialNumber: str = None
         self.pin: str = None
         self.batteryLevel: int = None
@@ -430,7 +430,7 @@ class MipowBulb(BleakClient):
 
         return response
 
-    async def write_gatt_char(self, characteristic, data, response):
+    async def write_gatt_char(self, characteristic, data, response: bool):
 
         LOGGER.debug(">>> %s: write_gatt_char(%s, %s)" %
                      (self.address, characteristic, MyLogger.hexstr(data)))
@@ -638,9 +638,9 @@ class MipowBulb(BleakClient):
 
         LOGGER.info("request name of %s..." % self.address)
         name = await self.read_gatt_char(MipowBulb.CHARACTERISTIC_PLAYBULB_GIVEN_NAME)
-        self.name = name.decode()
-        LOGGER.info("name of %s is %s." % (self.address, self.name))
-        return self.name
+        self.deviceName = name.decode()
+        LOGGER.info("name of %s is %s." % (self.address, self.deviceName))
+        return self.deviceName
 
     async def setName(self, name: str) -> 'MipowBulb':
 
@@ -751,13 +751,13 @@ class MipowBulb(BleakClient):
 
     def __str__(self) -> str:
 
-        return f"MipowBulb(name={self.name}, serialNumber={self.serialNumber}, pin={self.pin}, batteryLevel={self.batteryLevel}, firmwareRevision={self.firmwareRevision}, hardwareRevision={self.hardwareRevision}, softwareRevision={self.softwareRevision}, manufacturer={self.manufacturer}, pnpId={self.pnpId}, color={str(self.color)}, effect={str(self.effect)}, timers={str(self.timers)}, Security={str(self.security)})"
+        return f"MipowBulb(name={self.deviceName}, serialNumber={self.serialNumber}, pin={self.pin}, batteryLevel={self.batteryLevel}, firmwareRevision={self.firmwareRevision}, hardwareRevision={self.hardwareRevision}, softwareRevision={self.softwareRevision}, manufacturer={self.manufacturer}, pnpId={self.pnpId}, color={str(self.color)}, effect={str(self.effect)}, timers={str(self.timers)}, Security={str(self.security)})"
 
     def to_dict(self) -> dict:
 
         return {
             "address": self.address,
-            "name": self.name,
+            "name": self.deviceName,
             "serialNumber": self.serialNumber,
             "pin": self.pin,
             "batteryLevel": self.batteryLevel,
@@ -1529,7 +1529,7 @@ USAGE:   mipow.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
         for b in bulbs:
             s.append("-" * 47)
             s.append("Device mac:                   %s" % b.address)
-            s.append("Device name:                  %s" % (b.name or "n/a"))
+            s.append("Device name:                  %s" % (b.deviceName or "n/a"))
             s.append("Alias:                        %s" % (
                 self.alias.aliases[b.address] if b.address in self.alias.aliases else "n/a"))
             s.append("")
