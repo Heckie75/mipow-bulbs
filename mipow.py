@@ -97,6 +97,67 @@ class Color():
 
         return "off" if self.isOff() else f"WRGB({self.white},{self.red},{self.green},{self.blue})"
 
+    def human_readable(self) -> str:
+
+        if self.isOff():
+            return "off"
+
+        # If only white channel is set, show white brightness
+        if self.white and not (self.red or self.green or self.blue):
+            return f"white({self.white})"
+
+        r = int(self.red & 0xFF)
+        g = int(self.green & 0xFF)
+        b = int(self.blue & 0xFF)
+
+        # Basic palette of common color names
+        palette = [
+            ("black", (0, 0, 0)),
+            ("white", (255, 255, 255)),
+            ("red", (255, 0, 0)),
+            ("orange", (255, 165, 0)),
+            ("yellow", (255, 255, 0)),
+            ("green", (0, 128, 0)),
+            ("lime", (0, 255, 0)),
+            ("cyan", (0, 255, 255)),
+            ("blue", (0, 0, 255)),
+            ("violet", (238, 130, 238)),
+            ("magenta", (255, 0, 255)),
+            ("pink", (255, 192, 203)),
+            ("brown", (165, 42, 42)),
+            ("gray", (128, 128, 128))
+        ]
+
+        # Find nearest palette color by squared Euclidean distance
+        best_name = None
+        best_dist = None
+        for name, (pr, pg, pb) in palette:
+            dr = r - pr
+            dg = g - pg
+            db = b - pb
+            dist = dr * dr + dg * dg + db * db
+            if best_dist is None or dist < best_dist:
+                best_dist = dist
+                best_name = name
+
+        # If white channel is significant, prefer "white"/"warm white" variants
+        if self.white and self.white >= max(r, g, b):
+            # small heuristic: if RGB are similar, call it white-ish
+            if abs(r - g) < 16 and abs(r - b) < 16:
+                return f"white({self.white})"
+
+        # Add intensity qualifier for very low brightness
+        intensity = max(self.white, r, g, b)
+        qualifier = ""
+        if intensity < 40:
+            qualifier = " (very dim)"
+        elif intensity < 96:
+            qualifier = " (dim)"
+
+        # Return the name and hex code for clarity
+        hex_rgb = "#{:02X}{:02X}{:02X}".format(r, g, b)
+        return f"{best_name.capitalize()}{qualifier} / {hex_rgb}"
+
     def dim(self, factor: float) -> 'Color':
 
         white = int(min(255, self.white * factor))
@@ -1335,9 +1396,9 @@ class MipowBulbCLI():
             _TYPES: [str, str]
         },
         "wheel": {
-            _USAGE: "--wheel <bgr|grb|rbg|random> <minutes> [<start>] [<brightness>]",
+            _USAGE: "--wheel <rgb|rbg|grb|gbr|brg|bgr|random> <minutes> [<start>] [<brightness>]",
             _DESCR: "schedules a program running through color wheel\n- <minutes>: runtime in minutes (best in steps of 4m, up to 1020m)\n- <start>: (optional) starting time (hh:mm or in minutes)\n- <brightness>: 0 - 255 (default: 255)",
-            _REGEX: r"^(bgr|grb|rbg|random|BGR|GRB|RGB|RANDOM) (%s|%s|24:00|1440)( (%s|%s))?( %s)?$" % (_REG_1439, _REG_23COL59, _REG_1439, _REG_23COL59, _REG_255),
+            _REGEX: r"^(rgb|rbg|grb|gbr|brg|bgr|random|RGB|RBG|GRB|GBR|BRG|BGR|RANDOM) (%s|%s|24:00|1440)( (%s|%s))?( %s)?$" % (_REG_1439, _REG_23COL59, _REG_1439, _REG_23COL59, _REG_255),
             _TYPES: [str, str, str, int]
         },
         "security": {
@@ -1586,12 +1647,16 @@ USAGE:   mipow.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
             s.append("")
             s.append("Light:                        %s" %
                      (b.color.color_str() if b.color else "n/a"))
+            s.append("Color:                        %s" %
+                     (b.color.human_readable() if b.color else "n/a"))
             s.append("")
             if b.effect:
                 s.append("Effect:                       %s" %
                          b.effect.type_str())
                 s.append("- Light:                      %s" %
                          b.effect.color.color_str())
+                s.append("- Color:                      %s" %
+                         b.effect.color.human_readable())
                 s.append("- Delay:                      %i" % b.effect.delay)
                 s.append("- Runtime:                    %s" % b.effect.runtime_str())
                 s.append("- Repititions:                %i" %
@@ -1922,8 +1987,8 @@ USAGE:   mipow.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
                         command[MipowBulbCLI._PARAMS]) == 4 else 255
                     order = command[MipowBulbCLI._PARAMS][0]
                     if isinstance(order, str) and order.lower() == "random":
-                        order = random.choice(["bgr", "grb", "rbg"])
-                    await asyncio.gather(controller.setSceneWheel(order=order, runtime=runtime, hour=hour, minute=minute, brightness=brightness))
+                        order = random.choice(["rgb", "rbg", "grb", "gbr", "brg", "bgr"])
+                    await asyncio.gather(controller.setSceneWheel(order=order.lower(), runtime=runtime, hour=hour, minute=minute, brightness=brightness))
 
                 elif command[MipowBulbCLI._COMMAND] == "security" and len(command[MipowBulbCLI._PARAMS]) in [4, 8]:
 
