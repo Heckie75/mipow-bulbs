@@ -155,9 +155,43 @@ class Effect():
 
         return Effect.TYPES[5] if self.type > Effect.TYPE_CANDLE else Effect.TYPES[self.type]
 
-    def __str__(self) -> str:
+    def runtime_str(self) -> str:
 
-        return f"Effect(type={self.type_str()}, color={str(self.color)}, repetitions={self.repetitions}, delay={self.delay}, pause={self.pause})"
+        hold = self.delay
+
+        try:
+            if self.type == Effect.TYPE_FLASH:
+                cycle = hold * 2.0 / 100.0
+                freq = round(1000.0 / cycle) / 1000.0 if cycle else 0
+                bpm = round(freq * 60, 2)
+                return f"{cycle} sec, {freq} Hz, {bpm} bpm"
+            elif self.type == Effect.TYPE_PULSE:
+                cycle = hold * 51.1 / 100.0
+                freq = round(1000.0 / cycle) / 1000.0 if cycle else 0
+                bpm = round(freq * 60, 2)
+                return f"{cycle} sec, {freq} Hz, {bpm} bpm"
+            elif self.type == Effect.TYPE_DISCO:
+                cycle = hold / 100.0
+                freq = round(1000.0 / cycle) / 1000.0 if cycle else 0
+                bpm = round(freq * 60, 2)
+                return f"{cycle} sec, {freq} Hz, {bpm} bpm"
+            elif self.type == Effect.TYPE_RAINBOW:
+                cycle = round(hold * 1.536)
+                return f"{cycle} sec"
+            elif self.type == Effect.TYPE_CANDLE:
+                cycle = hold / 10.0
+                return f"{cycle} sec"
+            else:
+                return "n/a"
+        except Exception:
+            return "n/a"
+        
+
+
+    def __str__(self) -> str:
+        base = f"Effect(type={self.type_str()}, color={str(self.color)}, repetitions={self.repetitions}, delay={self.delay}, pause={self.pause})"
+        runtime_str = self.runtime_str()
+        return f"{base} [{runtime_str}]"
 
     def to_dict(self) -> dict:
 
@@ -1559,6 +1593,7 @@ USAGE:   mipow.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
                 s.append("- Light:                      %s" %
                          b.effect.color.color_str())
                 s.append("- Delay:                      %i" % b.effect.delay)
+                s.append("- Runtime:                    %s" % b.effect.runtime_str())
                 s.append("- Repititions:                %i" %
                          b.effect.repetitions)
                 s.append("- Pause:                      %i" % b.effect.pause)
