@@ -8,6 +8,7 @@ import sys
 import time
 from asyncio.exceptions import TimeoutError
 from datetime import datetime, timedelta
+import random
 
 from bleak import (AdvertisementData, BleakClient, BleakError, BleakScanner,
                    BLEDevice)
@@ -1300,9 +1301,9 @@ class MipowBulbCLI():
             _TYPES: [str, str]
         },
         "wheel": {
-            _USAGE: "--wheel <bgr|grb|rbg> <minutes> [<start>] [<brightness>]",
+            _USAGE: "--wheel <bgr|grb|rbg|random> <minutes> [<start>] [<brightness>]",
             _DESCR: "schedules a program running through color wheel\n- <minutes>: runtime in minutes (best in steps of 4m, up to 1020m)\n- <start>: (optional) starting time (hh:mm or in minutes)\n- <brightness>: 0 - 255 (default: 255)",
-            _REGEX: r"^(bgr|grb|rbg|BGR|GRB|RGB) (%s|%s|24:00|1440)( (%s|%s))?( %s)?$" % (_REG_1439, _REG_23COL59, _REG_1439, _REG_23COL59, _REG_255),
+            _REGEX: r"^(bgr|grb|rbg|random|BGR|GRB|RGB|RANDOM) (%s|%s|24:00|1440)( (%s|%s))?( %s)?$" % (_REG_1439, _REG_23COL59, _REG_1439, _REG_23COL59, _REG_255),
             _TYPES: [str, str, str, int]
         },
         "security": {
@@ -1884,7 +1885,10 @@ USAGE:   mipow.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
 
                     brightness = int(command[MipowBulbCLI._PARAMS][3]) if len(
                         command[MipowBulbCLI._PARAMS]) == 4 else 255
-                    await asyncio.gather(controller.setSceneWheel(order=command[MipowBulbCLI._PARAMS][0], runtime=runtime, hour=hour, minute=minute, brightness=brightness))
+                    order = command[MipowBulbCLI._PARAMS][0]
+                    if isinstance(order, str) and order.lower() == "random":
+                        order = random.choice(["bgr", "grb", "rbg"])
+                    await asyncio.gather(controller.setSceneWheel(order=order, runtime=runtime, hour=hour, minute=minute, brightness=brightness))
 
                 elif command[MipowBulbCLI._COMMAND] == "security" and len(command[MipowBulbCLI._PARAMS]) in [4, 8]:
 
